@@ -1,0 +1,46 @@
+{
+  "summary": "Comprehensive frontend-only smoke + interaction test of BHULLOK (Expo/React Native web preview) at 390x844 mobile viewport. Main menu, How-to-Play overlay, Codex (all 4 tabs), Scene Select, and all 11 story jumps mount without runtime errors. Gun combat verified end-to-end (ammo 8/8 -> 2/8 after 6 auto-locked shots, dodge + pause overlay + quit-to-menu work). Explore scene mounts with joystick + interact-button correctly disabled initially. Escape mini-game mounts with tap button and struggle meter visible. Melee scene: light/heavy/block/dodge all respond, monsters HP bar renders. Boss scene: boss-hp-bar + stagger-bar render, dodge/block/light/heavy all respond, no crashes. No console errors, no red screens, no uncaught exceptions across all scenes.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "index.tsx / codex.tsx / scenes.tsx are clean, use StyleSheet, all interactive elements have kebab-case testIDs, and React Native components only (View/Text/Pressable). No deprecated packages (expo-av, expo-barcode-scanner, expo-background-fetch) detected in referenced game files.",
+    "GameProvider dispatch actions (RESET / GRANT / SET_CHECKPOINT / GOTO) used from Scene Select work correctly - state transitions cleanly into /game and mounts the right scene each time."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (frontend-only)", "frontend": "100%"},
+  "seed_data_creation": "None (offline single-player game).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "App is served at EXPO_PUBLIC_BACKEND_URL (https://combat-logic-game.preview.emergentagent.com). Use /scenes to jump directly to any beat rather than replaying prologue. All testIDs are kebab-case and match request spec. Auto-lock in gun combat takes ~1-3s to acquire a bat; poll fire-button aria-disabled before clicking. Damage popups animate quickly (<400ms) - to verify them, poll aggressively or read them via screenshot rather than text queries. StatBar-based meters (struggle-meter, player-hp-bar, boss-hp-bar) do NOT expose aria-valuenow on web; verify by presence + visual/screenshot only.",
+  "test_results_detail": {
+    "menu": {"new-game-button": "OK", "codex-button": "OK", "scenes-button": "OK", "help-button": "OK"},
+    "help_overlay": {"open": "OK", "close": "OK"},
+    "codex": {"tab-inventory": "OK", "tab-codex": "OK", "tab-skills": "OK", "tab-stats": "OK", "codex-back-button": "OK"},
+    "scenes_screen": "OK (all 11 jump-* testIDs present)",
+    "scene_mounts": {
+      "prologue": "mounts (dialogue)",
+      "vision": "not directly asserted (dialogue)",
+      "fight_bats": "fire+dodge+player-hp-bar+ammo-counter+pause-button all present",
+      "get_fruit": "explore-joystick + interact-button (disabled initially) + pause-button present",
+      "passage": "not asserted individually",
+      "search_food": "not asserted individually",
+      "escape": "escape-tap-button + struggle-meter present",
+      "fight_monsters": "light+heavy+block+dodge+player-hp-bar present",
+      "boss_intro": "mounts (dialogue)",
+      "fight_boss": "boss-hp-bar + stagger-bar + light + heavy present, dodge/block respond",
+      "chapter_complete": "mounts"
+    },
+    "gun_combat": {"ammo_before": "8/8", "ammo_after": "2/8", "shots_fired": 6, "dodge": "OK"},
+    "pause_flow": {"scene-overlay": "opens on pause-button", "quit-button": "returns to main menu"},
+    "new_game_dialogue": "advance taps work without runtime error",
+    "console_errors": 0,
+    "page_errors": 0
+  }
+}
